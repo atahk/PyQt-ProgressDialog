@@ -1,36 +1,35 @@
 #!/usr/bin/env python
 # --*--codig: utf8 --*--
 
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtWidgets, QtCore
 
-class BaseProgressDialog(QtGui.QWidget):
+class BaseProgressDialog(QtWidgets.QWidget):
     updateProgress = QtCore.pyqtSignal(str)
     def __init__(self, text='', parent=None):
         super(BaseProgressDialog, self).__init__(parent)
         self.setFixedHeight(50)
         self.text  = text
-        self.progressbar = QtGui.QProgressBar( )
+        self.progressbar = QtWidgets.QProgressBar( )
         self.progressbar.setTextVisible(True)
         self.updateProgress.connect(self.setValue)
 
-        self.bottomBorder = QtGui.QWidget( )
+        self.bottomBorder = QtWidgets.QWidget( )
         self.bottomBorder.setStyleSheet("""
             background: palette(shadow);
         """)
-        self.bottomBorder.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed))
+        self.bottomBorder.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed))
         self.bottomBorder.setMinimumHeight(1)
 
-        self.label  = QtGui.QLabel(self.text)
+        self.label  = QtWidgets.QLabel(self.text)
         self.label.setStyleSheet("""
             font-weight: bold;
         """)
-        self.layout = QtGui.QVBoxLayout( )
+        self.layout = QtWidgets.QVBoxLayout( )
         self.layout.setContentsMargins(10,0,10,0)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.progressbar)
 
-        self.mainLayout = QtGui.QVBoxLayout( )
+        self.mainLayout = QtWidgets.QVBoxLayout( )
         self.mainLayout.setContentsMargins(0,0,0,0)
         self.mainLayout.addLayout(self.layout)
         self.mainLayout.addWidget(self.bottomBorder)
@@ -77,18 +76,18 @@ class UploadProgressBar(BaseProgressDialog):
         }"""
         self.progressbar.setStyleSheet(style)
 
-class ProgressDialog(QtGui.QMainWindow):
+class ProgressDialog(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(self.__class__, self).__init__(parent)
         self.resize(500, 250)
-        self.scrollArea = QtGui.QScrollArea( )
+        self.scrollArea = QtWidgets.QScrollArea( )
         self.scrollArea.setWidgetResizable(True)
         self.setCentralWidget(self.scrollArea)
 
-        self.centralWidget = QtGui.QWidget( )
+        self.centralWidget = QtWidgets.QWidget( )
         self.scrollArea.setWidget(self.centralWidget)
 
-        self.layout = QtGui.QVBoxLayout( )
+        self.layout = QtWidgets.QVBoxLayout( )
         self.layout.setAlignment(QtCore.Qt.AlignTop)
         self.layout.setContentsMargins(0,10,0,0)
         self.centralWidget.setLayout(self.layout)
@@ -99,7 +98,7 @@ class ProgressDialog(QtGui.QMainWindow):
 if __name__ == "__main__":
     import random
 
-    app = QtGui.QApplication([])
+    app = QtWidgets.QApplication([])
     progressNumbers = [x for x in range(1, 101)]
     progressItems = []
 
