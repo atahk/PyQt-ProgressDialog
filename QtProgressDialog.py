@@ -4,14 +4,14 @@
 from PyQt5 import QtWidgets, QtCore
 
 class BaseProgressDialog(QtWidgets.QWidget):
-    updateProgress = QtCore.pyqtSignal(str)
+    updateProgress = QtCore.pyqtSignal(int)
     def __init__(self, text='', parent=None):
         super(BaseProgressDialog, self).__init__(parent)
         self.setFixedHeight(50)
         self.text  = text
         self.progressbar = QtWidgets.QProgressBar( )
         self.progressbar.setTextVisible(True)
-        self.updateProgress.connect(self.setValue)
+        self.updateProgress.connect(self.addValue)
 
         self.bottomBorder = QtWidgets.QWidget( )
         self.bottomBorder.setStyleSheet("""
@@ -36,13 +36,20 @@ class BaseProgressDialog(QtWidgets.QWidget):
         self.setLayout(self.mainLayout)
         self.totalValue = 0
 
-    def setValue(self, value):
-        self.totalValue += len(value)
+    def addValue(self, value):
+        self.totalValue += value
         self.progressbar.setValue(self.totalValue)
 
+    def setValue(self, value):
+        self.totalValue = value
+        self.progressbar.setValue(self.totalValue)
+        
     def setMax(self, value):
         self.progressbar.setMaximum(value)
 
+    def getMax(self):
+        return self.progressbar.maximum()
+        
 class DownloadProgressBar(BaseProgressDialog):
     def __init__(self, text='Downloading', parent=None):
         super(self.__class__, self).__init__(text, parent)
